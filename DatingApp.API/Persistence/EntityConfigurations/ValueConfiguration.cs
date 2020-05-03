@@ -1,8 +1,8 @@
-using DatingApp.API.Models;
+using DatingApp.API.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DatingApp.API.Data.EntityConfigurations
+namespace DatingApp.API.Persistence.EntityConfigurations
 {
     public class ValueConfiguration : IEntityTypeConfiguration<Value>
     {
