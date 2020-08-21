@@ -19,6 +19,23 @@ namespace DatingApp.API.Persistence.EntityConfigurations
             
             builder.Property(x => x.PasswordSalt)
                 .IsRequired();
+            
+            builder.Property(x => x.DateOfBirth)
+                .IsRequired();
+
+            builder.Property(x => x.Created)
+                .IsRequired();
+
+            builder.Property(x => x.LastActive)
+                .IsRequired();
+            
+            builder.Property(x => x.Introduction)
+                .HasMaxLength(2000);
+
+            builder.HasMany(x => x.Photos)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
