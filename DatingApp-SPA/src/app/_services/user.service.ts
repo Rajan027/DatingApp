@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../_models/user';
 
@@ -22,5 +22,9 @@ export class UserService {
 
   updateUser(id: number, user: User) {
     return this.httpClient.put<User>(this.baseUrl + 'users/' + id, user);
+  }
+
+  setMainPhoto(userid: number, id: number) {
+    return this.httpClient.post(this.baseUrl + 'users/' + userid + '/photos/' + id + '/setMain', {});
   }
 }
