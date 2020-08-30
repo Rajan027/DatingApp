@@ -23,15 +23,15 @@ export class AuthService {
     this.photoUrl.next(photoUrl);
   }
 
-  login(model: any) {
-    return this.httpClient.post(this.baseUrl + 'login', model).pipe(
+  login(user: User) {
+    return this.httpClient.post(this.baseUrl + 'login', user).pipe(
       map((response: any) => {
-        const user = response;
-        if (user) {
-          localStorage.setItem('token', user.token);
-          localStorage.setItem('user', JSON.stringify(user.user));
-          this.decodedToken = this.jwtHelper.decodeToken(user.token);
-          this.currentUser = user.user;
+        const usr = response;
+        if (usr) {
+          localStorage.setItem('token', usr.token);
+          localStorage.setItem('user', JSON.stringify(usr.user));
+          this.decodedToken = this.jwtHelper.decodeToken(usr.token);
+          this.currentUser = usr.user;
           this.changeMemberPhoto(this.currentUser.photoUrl);
         }
       }),
@@ -39,8 +39,8 @@ export class AuthService {
     );
   }
 
-  register(model: any) {
-    return this.httpClient.post(this.baseUrl + 'register', model).pipe(
+  register(user: User) {
+    return this.httpClient.post(this.baseUrl + 'register', user).pipe(
       map(response => response),
       catchError(error => throwError(error))
     );
