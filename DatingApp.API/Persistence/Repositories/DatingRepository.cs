@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatingApp.API.Core.Models;
 using DatingApp.API.Core.Repositories;
+using DatingApp.API.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp.API.Persistence.Repositories
@@ -38,9 +39,9 @@ namespace DatingApp.API.Persistence.Repositories
             return await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-            return await _context.Users.Include(p => p.Photos).ToListAsync();
+            return await PagedList<User>.CreateAsync(_context.Users.Include(p => p.Photos), userParams.PageNumber, userParams.PageSize);
         }
 
         public async Task<bool> SaveAll()

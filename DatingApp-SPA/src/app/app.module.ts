@@ -12,6 +12,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TimeagoModule } from 'ngx-timeago';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -67,7 +68,8 @@ export function tokenGetter() {
       FileUploadModule,
       ReactiveFormsModule,
       BsDatepickerModule.forRoot(),
-      TimeagoModule.forRoot()
+      TimeagoModule.forRoot(),
+      PaginationModule.forRoot()
    ],
    providers: [
       ErrorInterceptorProvider,
