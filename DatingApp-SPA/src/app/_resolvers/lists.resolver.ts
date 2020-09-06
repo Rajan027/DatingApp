@@ -8,14 +8,15 @@ import { catchError } from 'rxjs/operators';
 import { PaginatedResult } from '../_models/Pagination';
 
 @Injectable()
-export class MemberListResolver implements Resolve<PaginatedResult<User[]>> {
+export class ListsResolver implements Resolve<PaginatedResult<User[]>> {
     pageNumber = 1;
     pageSize = 3;
+    likesParam = 'Likers';
 
     constructor(private userService: UserService, private router: Router, private alertify: AlertifyService) { }
 
     resolve(route: ActivatedRouteSnapshot): Observable<PaginatedResult<User[]>> {
-        return this.userService.getUsers(this.pageNumber, this.pageSize).pipe(
+        return this.userService.getUsers(this.pageNumber, this.pageSize, null, this.likesParam).pipe(
             catchError(error => {
                 this.alertify.error('Problem retrieving data');
                 this.router.navigate(['/home']);

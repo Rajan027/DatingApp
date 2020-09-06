@@ -26,6 +26,11 @@ namespace DatingApp.API.Persistence.Repositories
             _context.Remove(entity);
         }
 
+        public async Task<Like> GetLike(int userId, int recipientId)
+        {
+            return await _context.Likes.FirstOrDefaultAsync(x => x.LikerId == userId && x.LikeeId == recipientId);
+        }
+
         public async Task<Photo> GetMainPhotoForUser(int userId)
         {
             return await _context.Photos.FirstOrDefaultAsync(u => u.UserId == userId && u.IsMain);
@@ -48,6 +53,18 @@ namespace DatingApp.API.Persistence.Repositories
             users = users.Where(x => x.Id != userParams.UserId);
 
             users = users.Where(x => x.Gender == userParams.Gender);
+
+            if(userParams.Likers)
+            {
+                var userLikers = await GetUserLikes(userParams.UserId, userParams.Likers);
+                users = users.Where(x => userLikers.Contains(x.Id));
+            }
+
+            if(userParams.Likees)
+            {
+                var userLikees = await GetUserLikes(userParams.UserId, userParams.Likers);
+                users = users.Where(x => userLikees.Contains(x.Id));
+            }
 
             if(userParams.MinAge != 18 || userParams.MaxAge != 99)
             {
@@ -80,6 +97,20 @@ namespace DatingApp.API.Persistence.Repositories
         public async Task<bool> SaveAll()
         {
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        private async Task<IEnumerable<int>> GetUserLikes(int id, bool likers)
+        {
+            var users = await _context.Users.Include(x => x.Likers).Include(x => x.Likees).FirstOrDefaultAsync(x => x.Id == id);
+
+            if(likers)
+            {
+                return users.Likers.Where(x => x.LikeeId == id).Select(x => x.LikerId);
+            }
+            else
+            {
+                return users.Likees.Where(x => x.LikerId == id).Select(x => x.LikeeId);
+            }
         }
     }
 }
